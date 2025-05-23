@@ -1,0 +1,112 @@
+[
+    {
+        "id": 1,
+        "text": "Какой из перечисленных классов НЕ является кардио-тренировкой?",
+        "answers": [
+            "Step",
+            "Pilates",
+            "Dance Mix",
+            "Zumba"
+        ],
+        "correctAnswerIndex": 1
+    },
+    {
+        "id": 2,
+        "text": "Какой максимальный размер группы рекомендуется для эффективного проведения групповой тренировки?",
+        "answers": [
+            "10-15 человек",
+            "20-25 человек",
+            "30-35 человек",
+            "Более 40 человек"
+        ],
+        "correctAnswerIndex": 1
+    },
+    {
+        "id": 3,
+        "text": "Какой уровень сложности должен быть у базового класса для начинающих?",
+        "answers": [
+            "Высокий",
+            "Средний",
+            "Низкий",
+            "Не имеет значения"
+        ],
+        "correctAnswerIndex": 2
+    },
+    {
+        "id": 4,
+        "text": "Какой музыкальный темп (BPM) оптимален для кардио-тренировки?",
+        "answers": [
+            "60-80 BPM",
+            "80-100 BPM",
+            "120-140 BPM",
+            "160-180 BPM"
+        ],
+        "correctAnswerIndex": 2
+    },
+    {
+        "id": 5,
+        "text": "Какой из перечисленных классов направлен на развитие гибкости?",
+        "answers": [
+            "Body Pump",
+            "Yoga",
+            "CrossFit",
+            "Boxing"
+        ],
+        "correctAnswerIndex": 1
+    },
+    {
+        "id": 6,
+        "text": "Какой из перечисленных классов является силовой тренировкой?",
+        "answers": [
+            "Body Balance",
+            "Body Combat",
+            "Body Pump",
+            "Body Jam"
+        ],
+        "correctAnswerIndex": 2
+    },
+    {
+        "id": 7,
+        "text": "Какой из перечисленных классов направлен на развитие координации и баланса?",
+        "answers": [
+            "Body Attack",
+            "Body Step",
+            "Body Balance",
+            "Body Combat"
+        ],
+        "correctAnswerIndex": 2
+    },
+    {
+        "id": 8,
+        "text": "Какой из перечисленных классов является танцевальным?",
+        "answers": [
+            "Body Pump",
+            "Body Combat",
+            "Body Jam",
+            "Body Attack"
+        ],
+        "correctAnswerIndex": 2
+    },
+    {
+        "id": 9,
+        "text": "Какой из перечисленных классов основан на боевых искусствах?",
+        "answers": [
+            "Body Balance",
+            "Body Combat",
+            "Body Pump",
+            "Body Step"
+        ],
+        "correctAnswerIndex": 1
+    },
+    {
+        "id": 10,
+        "text": "Какой из перечисленных классов является высокоинтенсивной интервальной тренировкой?",
+        "answers": [
+            "Body Balance",
+            "Body Combat",
+            "Body Attack",
+            "Body Pump"
+        ],
+        "correctAnswerIndex": 2
+    }
+] 
