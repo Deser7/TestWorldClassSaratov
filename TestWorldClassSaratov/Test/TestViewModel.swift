@@ -4,6 +4,7 @@ import Foundation
 // MARK: - TestViewModel
 @Observable final class TestViewModel {
     // MARK: - Properties
+    let networkService = NetworkService.shared
     var questions: [Question] = []
     var currentQuestionIndex = 0
     var userAnswers: [Int: Int] = [:]
@@ -158,5 +159,12 @@ import Foundation
             self.error = "Ошибка загрузки теста: \(error.localizedDescription)"
             isLoading = false
         }
+    }
+    
+    private func loadQuestionsNetwork() {
+        isLoading = true
+        error = nil
+        
+        
     }
 }

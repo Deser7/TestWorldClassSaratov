@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: - TestResultView
-struct TestResultView: View {
+struct ResultView: View {
     // MARK: - Properties
     let score: Int
     let onDismiss: () -> Void
@@ -70,5 +70,5 @@ struct TestResultView: View {
 
 // MARK: - Preview
 #Preview {
-    TestResultView(score: 100, onDismiss: {})
+    ResultView(score: 100, onDismiss: {})
 }

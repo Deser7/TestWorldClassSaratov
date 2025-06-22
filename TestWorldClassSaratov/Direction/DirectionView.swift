@@ -1,9 +1,9 @@
 import SwiftUI
 
 // MARK: - DirectionSelectionView
-struct DirectionSelectionView: View {
+struct DirectionView: View {
     // MARK: - Properties
-    @State private var selectedDirection: FitnessDirection?
+    @State private var selectedDirection: DirectionViewModel?
     @State private var showingTest = false
     
     // MARK: - Body
@@ -22,7 +22,7 @@ struct DirectionSelectionView: View {
                         .fontWeight(.semibold)
                     
                     // MARK: - Direction Cards
-                    ForEach(FitnessDirection.directions) { direction in
+                    ForEach(DirectionViewModel.directions) { direction in
                         DirectionCardView(
                             direction: direction,
                             isSelected: selectedDirection?.id == direction.id
@@ -64,5 +64,5 @@ struct DirectionSelectionView: View {
 
 // MARK: - Preview
 #Preview {
-    DirectionSelectionView()
+    DirectionView()
 } 

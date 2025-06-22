@@ -8,9 +8,9 @@
 import SwiftUI
 
 // MARK: - DirectionCardView
-struct DirectionCardView: View {
+struct CardView: View {
     // MARK: - Properties
-    let direction: FitnessDirection
+    let direction: DirectionViewModel
     let isSelected: Bool
     let onTap: () -> Void
     
@@ -67,5 +67,5 @@ struct DirectionCardView: View {
 
 // MARK: - Preview
 #Preview {
-    DirectionCardView(direction: FitnessDirection.directions[0], isSelected: false, onTap: {})
+    CardView(direction: DirectionViewModel.directions[0], isSelected: false, onTap: {})
 }
