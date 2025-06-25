@@ -5,6 +5,7 @@ import Foundation
 @Observable final class TestViewModel {
     // MARK: - Properties
     let networkService = NetworkService.shared
+    let directionType: DirectionType
     var questions: [Question] = []
     var currentQuestionIndex = 0
     var userAnswers: [Int: Int] = [:]
@@ -15,12 +16,6 @@ import Foundation
     var remainingTime: TimeInterval = 0
     
     // MARK: - Computed Properties
-    var formattedTime: String {
-        let minutes = Int(remainingTime) / 60
-        let seconds = Int(remainingTime) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
-    
     var currentQuestion: Question? {
         guard currentQuestionIndex < questions.count else { return nil }
         return questions[currentQuestionIndex]
@@ -36,13 +31,14 @@ import Foundation
     
     // MARK: - Private Properties
     private var timer: Timer?
-    private let testFileName: String
     
     // MARK: - Initialization
-    init(testFileName: String) {
-        self.testFileName = testFileName
+    init(directionType: DirectionType) {
+        self.directionType = directionType
         setupTimeLimit()
-        loadQuestions()
+        Task {
+            await loadQuestionsFromAPI()
+        }
         startTimer()
     }
     
@@ -75,27 +71,28 @@ import Foundation
         testCompleted = false
         score = 0
         setupTimeLimit()
-        shuffleQuestions() // Перемешиваем вопросы и ответы при сбросе теста
+        
+        // Перемешиваем вопросы и ответы при сбросе теста, если включено в конфигурации
+        if TestConfiguration.Behavior.shuffleQuestionsOnReset {
+            shuffleQuestions()
+        }
+        
         startTimer()
     }
     
     // MARK: - Private Methods
     private func setupTimeLimit() {
-        switch testFileName {
-        case "general_questions":
-            remainingTime = 30 * 60 // 30 минут
-        case "manager_questions":
-            remainingTime = 10 * 60 // 10 минут
-        default:
-            remainingTime = 20 * 60 // 20 минут по умолчанию
-        }
+        remainingTime = TestConfiguration.TimeLimits.timeLimit(for: directionType)
     }
     
     private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+        timer = Timer.scheduledTimer(
+            withTimeInterval: TestConfiguration.Timer.interval,
+            repeats: true
+        ) { [weak self] _ in
             guard let self = self else { return }
             if self.remainingTime > 0 {
-                self.remainingTime -= 1
+                self.remainingTime -= TestConfiguration.Timer.updateFrequency
             } else {
                 self.completeTest()
             }
@@ -139,32 +136,27 @@ import Foundation
         }
     }
     
-    private func loadQuestions() {
+    @MainActor
+    private func loadQuestionsFromAPI() async {
         isLoading = true
         error = nil
-        
-        guard let url = Bundle.main.url(forResource: testFileName, withExtension: "json") else {
-            error = "Не удалось найти файл с тестом"
-            isLoading = false
-            return
-        }
         
         do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            questions = try decoder.decode([Question].self, from: data)
-            shuffleQuestions() // Перемешиваем вопросы и ответы после загрузки
+            // Используем удобный метод для получения вопросов по направлению
+            questions = try await networkService.fetchQuestions(for: directionType)
+            
+            // Перемешиваем вопросы и ответы после загрузки, если включено в конфигурации
+            if TestConfiguration.Behavior.shuffleQuestionsOnLoad {
+                shuffleQuestions()
+            }
+            
             isLoading = false
-        } catch {
-            self.error = "Ошибка загрузки теста: \(error.localizedDescription)"
+        } catch let networkError as NetworkError {
+            error = networkError.localizedDescription
+            isLoading = false
+        } catch let unexpectedError {
+            error = "Неожиданная ошибка: \(unexpectedError.localizedDescription)"
             isLoading = false
         }
-    }
-    
-    private func loadQuestionsNetwork() {
-        isLoading = true
-        error = nil
-        
-        
     }
 }
