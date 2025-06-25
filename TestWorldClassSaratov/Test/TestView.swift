@@ -37,7 +37,20 @@ struct TestView: View {
                 }
                 // MARK: - Test Completed State
                 else if viewModel.testCompleted {
-                    TestResultView(score: viewModel.score) {
+                    let correctAnswers = viewModel.userAnswers.compactMap { questionIndex, answerIndex in
+                        guard questionIndex < viewModel.questions.count else { return nil }
+                        return viewModel.questions[questionIndex].correctAnswerIndex == answerIndex ? 1 : 0
+                    }.reduce(0, +)
+                    
+                    let resultViewModel = ResultViewModel(
+                        score: viewModel.score,
+                        totalQuestions: viewModel.questions.count,
+                        correctAnswers: correctAnswers,
+                        directionName: getDirectionName(),
+                        timeSpent: TestConfiguration.TimeLimits.timeLimit(for: viewModel.directionType) - viewModel.remainingTime
+                    )
+                    
+                    ResultView(viewModel: resultViewModel) {
                         dismiss()
                     }
                 }
@@ -75,25 +88,21 @@ struct TestView: View {
                 
                 // MARK: - Timer
                 ToolbarItem(placement: .principal) {
-                    if !viewModel.isLoading && !viewModel.testCompleted {
-                        Text(viewModel.formattedTime)
-                            .font(.headline)
-                            .fontWeight(.bold)
-                            .foregroundColor(viewModel.remainingTime < 60 ? .red : .primary)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(.systemBackground))
-                                    .shadow(radius: 1)
-                            )
-                    }
+                    TimerView(
+                        remainingTime: viewModel.remainingTime,
+                        isVisible: !viewModel.isLoading && !viewModel.testCompleted
+                    )
                 }
             }
         }
     }
+    
+    // MARK: - Private Methods
+    private func getDirectionName() -> String {
+        return FitnessDirection.direction(for: viewModel.directionType)?.name ?? "Неизвестное направление"
+    }
 }
 
 #Preview {
-    TestView(viewModel: TestViewModel(testFileName: "gym_questions"))
+    TestView(viewModel: TestViewModel(directionType: .gym))
 }

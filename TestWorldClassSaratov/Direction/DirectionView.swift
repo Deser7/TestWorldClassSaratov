@@ -3,7 +3,7 @@ import SwiftUI
 // MARK: - DirectionSelectionView
 struct DirectionView: View {
     // MARK: - Properties
-    @State private var selectedDirection: DirectionViewModel?
+    @State private var viewModel = DirectionViewModel()
     @State private var showingTest = false
     
     // MARK: - Body
@@ -22,19 +22,19 @@ struct DirectionView: View {
                         .fontWeight(.semibold)
                     
                     // MARK: - Direction Cards
-                    ForEach(DirectionViewModel.directions) { direction in
+                    ForEach(viewModel.directions) { direction in
                         DirectionCardView(
                             direction: direction,
-                            isSelected: selectedDirection?.id == direction.id
+                            isSelected: viewModel.selectedDirection?.id == direction.id
                         ) {
                             withAnimation {
-                                selectedDirection = direction
+                                viewModel.selectDirection(direction)
                             }
                         }
                     }
                     
                     // MARK: - Start Test Button
-                    if let selected = selectedDirection {
+                    if let selected = viewModel.selectedDirection {
                         Button(action: { showingTest = true }) {
                             Text("Начать тест по направлению: \(selected.name)")
                                 .font(.headline)
@@ -54,8 +54,8 @@ struct DirectionView: View {
             .navigationTitle("World Class")
             .navigationBarTitleDisplayMode(.inline)
             .fullScreenCover(isPresented: $showingTest) {
-                if let direction = selectedDirection {
-                    TestView(viewModel: TestViewModel(testFileName: direction.testFileName))
+                if let direction = viewModel.selectedDirection {
+                    TestView(viewModel: TestViewModel(directionType: direction.type))
                 }
             }
         }

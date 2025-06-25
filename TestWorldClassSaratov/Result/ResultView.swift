@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - TestResultView
 struct ResultView: View {
     // MARK: - Properties
-    let score: Int
+    let viewModel: ResultViewModel
     let onDismiss: () -> Void
     
     // MARK: - Body
@@ -21,54 +21,85 @@ struct ResultView: View {
                 .font(.title)
                 .fontWeight(.bold)
             
-            // MARK: - Result Label
-            Text("Ваш результат:")
-                .font(.title2)
+            // MARK: - Direction Name
+            Text(viewModel.directionName)
+                .font(.title3)
+                .foregroundColor(.secondary)
             
             // MARK: - Score
-            Text("\(score)%")
+            Text("\(Int(viewModel.percentage))%")
                 .font(.system(size: 60, weight: .bold))
                 .foregroundColor(scoreColor)
             
+            // MARK: - Grade
+            Text(viewModel.grade)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(scoreColor)
+            
+            // MARK: - Detailed Results
+            VStack(spacing: 10) {
+                HStack {
+                    Text("Правильных ответов:")
+                    Spacer()
+                    Text("\(viewModel.correctAnswers) из \(viewModel.totalQuestions)")
+                        .fontWeight(.semibold)
+                }
+                
+                HStack {
+                    Text("Время выполнения:")
+                    Spacer()
+                    Text(viewModel.formattedTimeSpent)
+                        .fontWeight(.semibold)
+                }
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(10)
+            
             // MARK: - Result Message
-            Text(resultMessage)
+            Text(viewModel.getResultMessage())
                 .multilineTextAlignment(.center)
                 .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(viewModel.isPassed ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
+                )
             
             // MARK: - Dismiss Button
             Button("Вернуться к выбору направления") {
                 onDismiss()
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.borderedProminent)
+            .padding(.top)
         }
         .padding()
     }
     
     // MARK: - Computed Properties
     private var scoreColor: Color {
-        switch score {
-        case 0..<80:
+        if viewModel.isPassed {
+            switch viewModel.percentage {
+            case 90...100: return .green
+            case 80..<90: return .orange
+            default: return .blue
+            }
+        } else {
             return .red
-        case 80..<90:
-            return .yellow
-        default:
-            return .green
-        }
-    }
-    
-    private var resultMessage: String {
-        switch score {
-        case 0..<80:
-            return "Вам нужно больше практики. Рекомендуем повторить материал и попробовать снова."
-        case 80..<90:
-            return "Хороший результат! Есть куда расти, но база знаний уже есть."
-        default:
-            return "Отличный результат! Вы хорошо знаете материал."
         }
     }
 }
 
 // MARK: - Preview
 #Preview {
-    ResultView(score: 100, onDismiss: {})
+    ResultView(
+        viewModel: ResultViewModel(
+            score: 85,
+            totalQuestions: 10,
+            correctAnswers: 8,
+            directionName: "Тренажерный зал",
+            timeSpent: 1200
+        ),
+        onDismiss: {}
+    )
 }
