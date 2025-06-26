@@ -17,7 +17,7 @@ struct QuestionsResponse: Codable {
     let gym: [Question]?
     let kids: [Question]?
     
-    func questions(for testType: TestType) -> [Question] {
+    func questions(for testType: DirectionType) -> [Question] {
         switch testType {
         case .general:
             return general ?? []
