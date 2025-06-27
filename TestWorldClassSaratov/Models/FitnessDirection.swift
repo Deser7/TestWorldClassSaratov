@@ -65,56 +65,15 @@ struct FitnessDirection: Identifiable {
     }
     
     // MARK: - Static Properties
-    static let directions: [FitnessDirection] = [
-        // MARK: - General Questions
+    static let directions: [FitnessDirection] = DirectionType.allCases.map { directionType in
         FitnessDirection(
-            id: 1,
-            type: .general,
-            name: "Общие вопросы",
-            description: "Базовые знания о фитнесе, питании и здоровом образе жизни",
-            icon: "heart.fill"
-        ),
-        // MARK: - Gym
-        FitnessDirection(
-            id: 2,
-            type: .gym,
-            name: "Тренажерный зал",
-            description: "Тренировки на тренажерах, со свободными весами и в функциональной зоне",
-            icon: "dumbbell.fill"
-        ),
-        // MARK: - Group Programs
-        FitnessDirection(
-            id: 3,
-            type: .group,
-            name: "Групповые программы",
-            description: "Тренировки в группе под руководством профессионального тренера",
-            icon: "person.3.fill"
-        ),
-        // MARK: - Water Programs
-        FitnessDirection(
-            id: 4,
-            type: .water,
-            name: "Водные программы",
-            description: "Тренировки в бассейне для всех уровней подготовки",
-            icon: "figure.pool.swim"
-        ),
-        // MARK: - Kids Fitness
-        FitnessDirection(
-            id: 5,
-            type: .kids,
-            name: "Детский фитнес",
-            description: "Специальные программы для детей разных возрастных групп",
-            icon: "figure.child"
-        ),
-        // MARK: - Manager Questions
-        FitnessDirection(
-            id: 6,
-            type: .manager,
-            name: "Вопросы от управляющего",
-            description: "Ключевые вопросы по управлению фитнес-клубом",
-            icon: "person.fill.checkmark"
+            id: directionType.hashValue,
+            type: directionType,
+            name: directionType.displayName,
+            description: directionType.description,
+            icon: directionType.icon
         )
-    ]
+    }
     
     // MARK: - Helper Methods
     static func direction(for type: DirectionType) -> FitnessDirection? {
