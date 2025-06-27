@@ -70,38 +70,6 @@ final class NetworkService {
             throw NetworkError.networkError(error)
         }
     }
-    
-    // MARK: - Direction-Specific Methods
-    
-    /// Получение общих вопросов
-    func fetchGeneralQuestions() async throws -> [Question] {
-        return try await fetchQuestions(from: NetworkConfiguration.Endpoints.general)
-    }
-    
-    /// Получение вопросов по тренажерному залу
-    func fetchGymQuestions() async throws -> [Question] {
-        return try await fetchQuestions(from: NetworkConfiguration.Endpoints.gym)
-    }
-    
-    /// Получение вопросов по групповым программам
-    func fetchGroupQuestions() async throws -> [Question] {
-        return try await fetchQuestions(from: NetworkConfiguration.Endpoints.group)
-    }
-    
-    /// Получение вопросов по водным программам
-    func fetchWaterQuestions() async throws -> [Question] {
-        return try await fetchQuestions(from: NetworkConfiguration.Endpoints.water)
-    }
-    
-    /// Получение вопросов от управляющего
-    func fetchManagerQuestions() async throws -> [Question] {
-        return try await fetchQuestions(from: NetworkConfiguration.Endpoints.manager)
-    }
-    
-    /// Получение вопросов по детскому фитнесу
-    func fetchKidsQuestions() async throws -> [Question] {
-        return try await fetchQuestions(from: NetworkConfiguration.Endpoints.kids)
-    }
 }
 
 // MARK: - NetworkService Extension
