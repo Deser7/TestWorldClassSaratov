@@ -91,3 +91,7 @@ iOSInjectionProject/
 
 # macOS
 .DS_Store 
+
+# Documentation and Examples (development only)
+# Uncomment the line below to exclude documentation from production builds
+# TestWorldClassSaratov/Documentation/ 
