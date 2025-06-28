@@ -36,38 +36,53 @@ final class NetworkService {
     
     // MARK: - Properties
     static let shared = NetworkService()
-    private let urlSession: URLSession
-    private let jsonDecoder: JSONDecoder
     
     // MARK: - Initialization
-    private init() {
-        self.urlSession = NetworkConfiguration.createURLSession()
-        self.jsonDecoder = JSONDecoder()
-        self.jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-    }
+    private init() {}
     
     // MARK: - Generic Fetch Method
     private func fetchQuestions(from endpoint: String) async throws -> [Question] {
-        let fullURL = "\(NetworkConfiguration.API.fullBaseURL)\(endpoint)"
+        let fullURL = "\(NetworkConfiguration.API.baseURL)\(endpoint)"
         
         guard let url = URL(string: fullURL) else {
             throw NetworkError.invalidURL
         }
         
         do {
-            let (data, response) = try await urlSession.data(from: url)
+            let (data, response) = try await URLSession.shared.data(from: url)
             
             guard let httpResponse = response as? HTTPURLResponse,
                   NetworkConfiguration.HTTP.successStatusCodeRange ~= httpResponse.statusCode else {
                 throw NetworkError.badServerResponse
             }
             
-            return try jsonDecoder.decode([Question].self, from: data)
+            // Декодируем как QuestionsResponse, а не как массив
+            let questionsResponse = try JSONDecoder().decode(QuestionsResponse.self, from: data)
+            
+            // Извлекаем вопросы по типу направления из endpoint
+            let directionType = extractDirectionType(from: endpoint)
+            return questionsResponse.questions(for: directionType)
             
         } catch let error as NetworkError {
             throw error
         } catch {
             throw NetworkError.networkError(error)
+        }
+    }
+    
+    // MARK: - Helper Methods
+    private func extractDirectionType(from endpoint: String) -> DirectionType {
+        // Извлекаем тип направления из endpoint (например, "/gym" -> .gym)
+        let cleanEndpoint = endpoint.replacingOccurrences(of: "/", with: "")
+        
+        switch cleanEndpoint {
+        case "general": return .general
+        case "gym": return .gym
+        case "group": return .group
+        case "water": return .water
+        case "manager": return .manager
+        case "kids": return .kids
+        default: return .general // fallback
         }
     }
 }
@@ -79,10 +94,5 @@ extension NetworkService {
     func fetchQuestions(for directionType: DirectionType) async throws -> [Question] {
         let endpoint = NetworkConfiguration.Endpoints.endpoint(for: directionType)
         return try await fetchQuestions(from: endpoint)
-    }
-    
-    /// Получение вопросов по направлению фитнеса
-    func fetchQuestions(for direction: FitnessDirection) async throws -> [Question] {
-        return try await fetchQuestions(for: direction.type)
     }
 }

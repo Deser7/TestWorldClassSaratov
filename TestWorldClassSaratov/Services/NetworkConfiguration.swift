@@ -13,9 +13,7 @@ final class NetworkConfiguration {
     
     // MARK: - API Configuration
     struct API {
-        static let baseURL = "https://world-class-json-api.onrender.com"
-        static let questionsPath = "/questions"
-        static let fullBaseURL = "\(baseURL)\(questionsPath)"
+        static let baseURL = "https://world-class-json-api.onrender.com/questions"
     }
     
     // MARK: - HTTP Configuration
@@ -54,15 +52,5 @@ final class NetworkConfiguration {
         static let decodingError = "Ошибка обработки данных с сервера"
         static let noData = "Данные не получены от сервера"
         static let networkError = "Ошибка сети при загрузке данных"
-    }
-    
-    // MARK: - URLSession Configuration
-    static func createURLSession() -> URLSession {
-        let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = HTTP.timeoutInterval
-        config.timeoutIntervalForResource = HTTP.timeoutInterval
-        config.requestCachePolicy = HTTP.cachePolicy
-        config.waitsForConnectivity = true
-        return URLSession(configuration: config)
     }
 } 
