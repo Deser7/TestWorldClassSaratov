@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - DirectionCardView
 struct DirectionCardView: View {
     // MARK: - Properties
-    let direction: FitnessDirection
+    let direction: DirectionType
     let isSelected: Bool
     let onTap: () -> Void
     
@@ -30,7 +30,7 @@ struct DirectionCardView: View {
                 
                 // MARK: - Text Content
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(direction.name)
+                    Text(direction.displayName)
                         .font(.headline)
                         .foregroundColor(.primary)
                     
@@ -67,5 +67,5 @@ struct DirectionCardView: View {
 
 // MARK: - Preview
 #Preview {
-    DirectionCardView(direction: FitnessDirection.directions[0], isSelected: false, onTap: {})
+    DirectionCardView(direction: .gym, isSelected: false, onTap: {})
 }

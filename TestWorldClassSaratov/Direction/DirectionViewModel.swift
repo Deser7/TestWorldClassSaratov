@@ -5,8 +5,8 @@ import Observation
 @Observable final class DirectionViewModel {
     
     // MARK: - Properties
-    let directions: [FitnessDirection] = FitnessDirection.directions
-    var selectedDirection: FitnessDirection?
+    let directions: [DirectionType] = DirectionType.allCases
+    var selectedDirection: DirectionType?
     var isLoading = false
     var error: String?
     
@@ -16,7 +16,7 @@ import Observation
     }
     
     // MARK: - Public Methods
-    func selectDirection(_ direction: FitnessDirection) {
+    func selectDirection(_ direction: DirectionType) {
         selectedDirection = direction
     }
     
@@ -24,7 +24,7 @@ import Observation
         selectedDirection = nil
     }
     
-    func getDirection(by type: DirectionType) -> FitnessDirection? {
-        return directions.first { $0.type == type }
+    func getDirection(by type: DirectionType) -> DirectionType? {
+        return directions.first { $0 == type }
     }
 } 

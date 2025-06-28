@@ -99,7 +99,7 @@ struct TestView: View {
     
     // MARK: - Private Methods
     private func getDirectionName() -> String {
-        return FitnessDirection.direction(for: viewModel.directionType)?.name ?? "Неизвестное направление"
+        return viewModel.directionType.displayName
     }
 }
 

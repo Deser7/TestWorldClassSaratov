@@ -36,7 +36,7 @@ struct DirectionView: View {
                     // MARK: - Start Test Button
                     if let selected = viewModel.selectedDirection {
                         Button(action: { showingTest = true }) {
-                            Text("Начать тест по направлению: \(selected.name)")
+                            Text("Начать тест по направлению: \(selected.displayName)")
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -55,7 +55,7 @@ struct DirectionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .fullScreenCover(isPresented: $showingTest) {
                 if let direction = viewModel.selectedDirection {
-                    TestView(viewModel: TestViewModel(directionType: direction.type))
+                    TestView(viewModel: TestViewModel(directionType: direction))
                 }
             }
         }

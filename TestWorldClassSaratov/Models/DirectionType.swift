@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - DirectionType
-enum DirectionType: String, CaseIterable {
+enum DirectionType: String, CaseIterable, Identifiable {
     case general = "general"
     case gym = "gym"
     case group = "group"
@@ -16,6 +16,10 @@ enum DirectionType: String, CaseIterable {
     case manager = "manager"
     case kids = "kids"
     
+    // MARK: - Identifiable
+    var id: String { rawValue }
+    
+    // MARK: - Display Properties
     var displayName: String {
         switch self {
         case .general: return "Общие вопросы"
@@ -47,6 +51,11 @@ enum DirectionType: String, CaseIterable {
         case .manager: return "person.fill.checkmark"
         case .kids: return "figure.child"
         }
+    }
+    
+    // MARK: - Network Properties
+    var endpoint: String {
+        return "/\(rawValue)"
     }
 }
 
